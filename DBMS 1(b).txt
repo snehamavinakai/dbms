@@ -1,0 +1,64 @@
+mysql> use employee_details;
+Database changed
+mysql> show tables;
++----------------------------+
+| Tables_in_employee_details |
++----------------------------+
+| department                 |
+| employee                   |
++----------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee;
++-------+-------+------+--------+--------+
+| empid | ename | age  | salary | deptno |
++-------+-------+------+--------+--------+
+|     1 | Akash |   22 |  25000 |    101 |
+|     2 | Arun  |   25 |  65000 |    102 |
+|     3 | Abi   |   20 |  20000 |    103 |
+|     4 | Akul  |   30 |  40000 |    104 |
+|     5 | Anil  |   27 |  30000 |    105 |
++-------+-------+------+--------+--------+
+5 rows in set (0.02 sec)
+
+mysql> select * from department;
++--------+------------+-----------+
+| deptno | dname      | managerid |
++--------+------------+-----------+
+|    101 | CS         |       201 |
+|    102 | Civil      |       202 |
+|    103 | CS         |       203 |
+|    104 | E&C        |       204 |
+|    105 | Mechanical |       205 |
++--------+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select empid,ename from employee where salary between 10000 and 50000;
++-------+-------+
+| empid | ename |
++-------+-------+
+|     1 | Akash |
+|     3 | Abi   |
+|     4 | Akul  |
+|     5 | Anil  |
++-------+-------+
+4 rows in set (0.00 sec)
+mysql> select ename,salary from employee where deptno in(select deptno from department where dname = 'CS');
++-------+--------+
+| ename | salary |
++-------+--------+
+| Akash |  25000 |
+| Abi   |  20000 |
++-------+--------+
+2 rows in set (0.00 sec)
+mysql> select ename,dname from employee,department where employee.deptno=department.deptno;
++-------+------------+
+| ename | dname      |
++-------+------------+
+| Akash | CS         |
+| Arun  | Civil      |
+| Abi   | CS         |
+| Akul  | E&C        |
+| Anil  | Mechanical |
++-------+------------+
+5 rows in set (0.02 sec)
