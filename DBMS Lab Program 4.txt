@@ -1,0 +1,201 @@
+//(4)Consider the following tables are mentioned by a book dealer
+AUTHOR(authorid:int,name:string,city:string,country:string);
+PUBLISHER(publisherid:int,name:string,city:string,country:string);
+CATALOG(bookid :int,title:string,authorid:int,publisherid:int,categoryid:int,year:int,price:int);
+CATEGORY(categoryid:int,description:string);
+ORDER DETAILS(orderno:int,bookid:int,quality:int);
+
+mysql> create database bookdealer;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use bookdealer;
+Database changed
+mysql> create table author(authorid int PRIMARY KEY,name varchar(10),city varchar(10),country char(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into author values(101,'PB Kottur','Banglore','India');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into author values(102,'Balaguru','Delhi','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into author values(103,'Padma R','Hyderabad','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into author values(104,'Robert','Pans','USA');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into author values(105,'Willson','Mumbia','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from author;
++----------+-----------+-----------+---------+
+| authorid | name      | city      | country |
++----------+-----------+-----------+---------+
+|      101 | PB Kottur | Banglore  | India   |
+|      102 | Balaguru  | Delhi     | India   |
+|      103 | Padma R   | Hyderabad | India   |
+|      104 | Robert    | Pans      | USA     |
+|      105 | Willson   | Mumbia    | India   |
++----------+-----------+-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> create table publisher(publisherid int PRIMARY KEY,name varchar(15),city varchar(15),country varchar(15));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into publisher values(1001,'Pearson','Pune','India');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into publisher values(2002,'Tata','Delhi','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into publisher values(3003,'Pearson','Banglore','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into publisher values(4004,'Tata','Hyderabad','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into publisher values(5005,'Pearson','Gadag','India');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from publisher;
++-------------+---------+-----------+---------+
+| publisherid | name    | city      | country |
++-------------+---------+-----------+---------+
+|        1001 | Pearson | Pune      | India   |
+|        2002 | Tata    | Delhi     | India   |
+|        3003 | Pearson | Banglore  | India   |
+|        4004 | Tata    | Hyderabad | India   |
+|        5005 | Pearson | Gadag     | India   |
++-------------+---------+-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> create table category(categoryid int PRIMARY KEY,description char(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into category values(100,'Networking');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into category values(200,'Programming');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into category values(300,'Developing');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into category values(400,'Security');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into category values(500,'Electronics');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from category;
++------------+-------------+
+| categoryid | description |
++------------+-------------+
+|        100 | Networking  |
+|        200 | Programming |
+|        300 | Developing  |
+|        400 | Security    |
+|        500 | Electronics |
++------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> create table catalog(bookid int PRIMARY KEY,title varchar(10),authorid int,FOREIGN KEY(authorid) references author(authorid),publisherid int,FOREIGN KEY(publisherid) references publisher(publisherid),categoryid int,FOREIGN KEY(categoryid) references category(categoryid),year int,price int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into catalog values(1000,'Java',101,1001,100,2002,1590);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into catalog values(1001,'Java',102,2002,200,2003,2000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into catalog values(1002,'C++',103,3003,300,2005,1500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into catalog values(1003,'DBMS',104,4004,400,2008,500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into catalog values(1004,'OS',105,5005,500,2006,500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from catalog;
++--------+-------+----------+-------------+------------+------+-------+
+| bookid | title | authorid | publisherid | categoryid | year | price |
++--------+-------+----------+-------------+------------+------+-------+
+|   1000 | Java  |      101 |        1001 |        100 | 2002 |  1590 |
+|   1001 | Java  |      102 |        2002 |        200 | 2003 |  2000 |
+|   1002 | C++   |      103 |        3003 |        300 | 2005 |  1500 |
+|   1003 | DBMS  |      104 |        4004 |        400 | 2008 |   500 |
+|   1004 | OS    |      105 |        5005 |        500 | 2006 |   500 |
++--------+-------+----------+-------------+------------+------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table orderdetails(orderno int,bookid int,FOREIGN KEY(bookid)references catalog(bookid),quantity int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into orderdetails values(1010,1000,200);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orderdetails values(1011,1001,300);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orderdetails values(1012,1002,205);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orderdetails values(1013,1003,305);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orderdetails values(1014,1004,500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from orderdetails;
++---------+--------+----------+
+| orderno | bookid | quantity |
++---------+--------+----------+
+|    1010 |   1000 |      200 |
+|    1011 |   1001 |      300 |
+|    1012 |   1002 |      205 |
+|    1013 |   1003 |      305 |
+|    1014 |   1004 |      500 |
++---------+--------+----------+
+5 rows in set (0.00 sec)
+
+//(3)Give the details of the author who have 2 or more book in the catalog and price of the book is greater than the average price of the books in the catalog and the year of publication is after 2000.
+
+mysql> select authorid,name,city,country from author where authorid in(select authorid from catalog where year > 2000 and price >(select avg(price) from catalog having count(*)>=2));
++----------+-----------+-----------+---------+
+| authorid | name      | city      | country |
++----------+-----------+-----------+---------+
+|      101 | PB Kottur | Banglore  | India   |
+|      102 | Balaguru  | Delhi     | India   |
+|      103 | Padma R   | Hyderabad | India   |
++----------+-----------+-----------+---------+
+3 rows in set (0.00 sec)
+
+//(4) Find the author of book which has maximum sales.
+
+mysql> select name from author a,orderdetails o,catalog c where o.bookid = c.bookid and a.authorid = c.authorid and o.quantity = (select max(quantity) from orderdetails);
++---------+
+| name    |
++---------+
+| Willson |
++---------+
+1 row in set (0.01 sec)
+
+//(5) Demonstrate how you increase the price of books published by a specific publisher by 10%.
+
+mysql> update catalog set price = 1.1 * price where publisherid in(select publisherid from publisher where name = 'Pearson');
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from catalog;
++--------+-------+----------+-------------+------------+------+-------+
+| bookid | title | authorid | publisherid | categoryid | year | price |
++--------+-------+----------+-------------+------------+------+-------+
+|   1000 | Java  |      101 |        1001 |        100 | 2002 |  1749 |
+|   1001 | Java  |      102 |        2002 |        200 | 2003 |  2000 |
+|   1002 | C++   |      103 |        3003 |        300 | 2005 |  1650 |
+|   1003 | DBMS  |      104 |        4004 |        400 | 2008 |   500 |
+|   1004 | OS    |      105 |        5005 |        500 | 2006 |   550 |
++--------+-------+----------+-------------+------------+------+-------+
+5 rows in set (0.00 sec)
