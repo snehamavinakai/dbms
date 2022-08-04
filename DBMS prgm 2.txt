@@ -1,0 +1,135 @@
+
+mysql> use order_details;
+Database changed
+mysql> create table salesman(sid int primary key,sname varchar(15),city varchar(30),commission int);
+Query OK, 0 rows affected (0.04 sec)
+mysql> create table orders(order_no int primary key,purchase_amt int,order_date date,cid int references customer(cid));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table orders add sid int references salesman(sid);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into salesman values(01,'Sumanth','Banglore',1500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salesman values(02,'Yash','Dharwad',1000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salesman values(03,'Bhagya','Hubli',600);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salesman values(04,'Ammu','Gadag',500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salesman values(05,'Jhon','Mumbia',1400);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from salesman;
++-----+---------+----------+------------+
+| sid | sname   | city     | commission |
++-----+---------+----------+------------+
+|   1 | Sumanth | Banglore |       1500 |
+|   2 | Yash    | Dharwad  |       1000 |
+|   3 | Bhagya  | Hubli    |        600 |
+|   4 | Ammu    | Gadag    |        500 |
+|   5 | Jhon    | Mumbia   |       1400 |
++-----+---------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into customer values(11,'Aishu','Banglore','10',1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(22,'Venna','Davanger','10',2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(33,'Jaya','Delhi','20',3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(44,'Swati','Hassna','30',4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(55,'Mangala','Mumbia','30',5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from customer;
++-----+---------+----------+-------+------+
+| cid | cname   | city     | grade | sid  |
++-----+---------+----------+-------+------+
+|  11 | Aishu   | Banglore | 10    |    1 |
+|  22 | Venna   | Davanger | 10    |    2 |
+|  33 | Jaya    | Delhi    | 20    |    3 |
+|  44 | Swati   | Hassna   | 30    |    4 |
+|  55 | Mangala | Mumbia   | 30    |    5 |
++-----+---------+----------+-------+------+
+5 rows in set (0.00 sec)
+
+mysql> insert into orders values(111,1300,'2022-01-08',11,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders values(222,8000,'2022-09-01',22,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders values(333,19000,'2011-07-16',33,3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders values(444,4000,'2021-07-02',44,4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into orders values(555,6100,'2018-08-21',55,5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from orders;
++----------+--------------+------------+------+------+
+| order_no | purchase_amt | order_date | cid  | sid  |
++----------+--------------+------------+------+------+
+|      111 |         1300 | 2022-01-08 |   11 |    1 |
+|      222 |         8000 | 2022-09-01 |   22 |    2 |
+|      333 |        19000 | 2011-07-16 |   33 |    3 |
+|      444 |         4000 | 2021-07-02 |   44 |    4 |
+|      555 |         6100 | 2018-08-21 |   55 |    5 |
++----------+--------------+------------+------+------+
+5 rows in set (0.00 sec)
+
+mysql> select count(*) from customer where grade>(select avg(grade) from customer where city = 'Banglore');
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from customer where grade>(select avg(grade) from customer where city='Banglore');
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.00 sec)
+mysql> select sname,sid from salesman s where 1>(select count(*) from customer where sid = s.sid);
+Empty set (0.00 sec)
+mysql> select s.sid,sname,cname,commission from salesman s,customer c where s.city = c.city UNION(select sid,sname,'NO MATCH',commission from salesman where not city = any(select city from customer))order by 2 desc;
++-----+---------+----------+------------+
+| sid | sname   | cname    | commission |
++-----+---------+----------+------------+
+|   2 | Yash    | NO MATCH |       1000 |
+|   1 | Sumanth | Aishu    |       1500 |
+|   5 | Jhon    | Mangala  |       1400 |
+|   3 | Bhagya  | NO MATCH |        600 |
+|   4 | Ammu    | NO MATCH |        500 |
++-----+---------+----------+------------+
+5 rows in set (0.01 sec)
+mysql> create view elitsalesman1 as select  o.order_date,s.sid,s.sname from salesman s,orders o where s.sid = o.sid and o.purchase_amt = (select max(purchase_amt)from orders c where c.order_date = o.order_date);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from elitsalesman1;
++------------+-----+---------+
+| order_date | sid | sname   |
++------------+-----+---------+
+| 2022-01-08 |   1 | Sumanth |
+| 2022-09-01 |   2 | Yash    |
+| 2011-07-16 |   3 | Bhagya  |
+| 2021-07-02 |   4 | Ammu    |
+| 2018-08-21 |   5 | Jhon    |
++------------+-----+---------+
+5 rows in set (0.01 sec)
