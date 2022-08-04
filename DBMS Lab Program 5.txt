@@ -1,0 +1,213 @@
+//Consider the following database of Student enrollment in course and book adopted for each   course.
+
+mysql> create database student_enrollment;
+Query OK, 1 row affected (0.05 sec)
+mysql> use student_enrollment;
+Database changed
+mysql> create table student(regno char(10) Primary key,name char(10),major char(10),bdate date);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into student values('2tg08cs001','Vijay','Computer','1986-01-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values('2tg08cs002','Neeta','Computer','1986-02-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values('2tg08cs003','Vinod','Computer','1986-03-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values('2tg08cs004','Harish','Networking','1986-04-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> update student set major = 'Networking' where regno = '2tg08cs003';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> insert into student values('2tg08cs005','Ankit','Electronic','1986-05-15');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++------------+--------+------------+------------+
+| regno      | name   | major      | bdate      |
++------------+--------+------------+------------+
+| 2tg08cs001 | Vijay  | Computer   | 1986-01-15 |
+| 2tg08cs002 | Neeta  | Computer   | 1986-02-15 |
+| 2tg08cs003 | Vinod  | Networking | 1986-03-15 |
+| 2tg08cs004 | Harish | Networking | 1986-04-15 |
+| 2tg08cs005 | Ankit  | Electronic | 1986-05-15 |
++------------+--------+------------+------------+
+5 rows in set (0.00 sec)
+mysql> create table course(course int Primary key,cname char(10),dept char(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into course values(1,'BCA','CS');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>  insert into course values(2,'B.Com','Commerce');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>   insert into course values(3,'BE','CS');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into course values(4,'BE','IS');
+Query OK, 1 row affected (0.00 sec)
+
+mysql>  insert into course values(5,'B.Sc','CS');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from course;
++--------+-------+----------+
+| course | cname | dept     |
++--------+-------+----------+
+|      1 | BCA   | CS       |
+|      2 | B.Com | Commerce |
+|      3 | BE    | CS       |
+|      4 | BE    | IS       |
+|      5 | B.Sc  | CS       |
++--------+-------+----------+
+5 rows in set (0.00 sec)
+
+mysql> create table enroll(regno char(10) references student(regno),course int references course1(course),sem int,marks int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into enroll values('2tg08cs001',1,2,95);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into enroll values('2tg08cs002',2,4,85);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into enroll values('2tg08cs003',3,5,86);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into enroll values('2tg08cs004',4,7,92);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into enroll values('2tg08cs005',5,6,98);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from enroll;
++------------+--------+------+-------+
+| regno      | course | sem  | marks |
++------------+--------+------+-------+
+| 2tg08cs001 |      1 |    2 |    95 |
+| 2tg08cs002 |      2 |    4 |    85 |
+| 2tg08cs003 |      3 |    5 |    86 |
+| 2tg08cs004 |      4 |    7 |    92 |
+| 2tg08cs005 |      5 |    6 |    98 |
++------------+--------+------+-------+
+5 rows in set (0.00 sec)
+mysql> create table Text(book_isbn int references Book_Adoption(book_isbn),book_title char(10),publisher char(10),author char(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into text values(111,'C++','Pearson','Petrick');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into text values(222,'Java','Tata','Robert');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into text values(333,'Unix','Tata','Selena');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into text values(444,'C','Pearson','John');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into text values(555,'Jzee','Tata','James');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from text;
++-----------+------------+-----------+---------+
+| book_isbn | book_title | publisher | author  |
++-----------+------------+-----------+---------+
+|       111 | C++        | Pearson   | Petrick |
+|       222 | Java       | Tata      | Robert  |
+|       333 | Unix       | Tata      | Selena  |
+|       444 | C          | Pearson   | John    |
+|       555 | Jzee       | Tata      | James   |
++-----------+------------+-----------+---------+
+5 rows in set (0.00 sec)
+mysql>  create table Book_Adoption(course int references coures(course),sem int references enroll(sem),book_isbn int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Book_Adoption values(1,2,111);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Book_Adoption values(2,7,222);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Book_Adoption values(3,4,333);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Book_Adoption values(4,6,444);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Book_Adoption values(5,2,555);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Book_Adoption;
++--------+------+-----------+
+| course | sem  | book_isbn |
++--------+------+-----------+
+|      1 |    2 |       111 |
+|      2 |    7 |       222 |
+|      3 |    4 |       333 |
+|      4 |    6 |       444 |
+|      5 |    2 |       555 |
++--------+------+-----------+
+5 rows in set (0.00 sec)
+
+//(3)Demostrate how you add a new text book to the database and make this book be adopted by same department.
+
+mysql> insert into text values(666,'ada','Tata','Tom');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from text;
++-----------+------------+-----------+---------+
+| book_isbn | book_title | publisher | author  |
++-----------+------------+-----------+---------+
+|       111 | C++        | Pearson   | Petrick |
+|       222 | Java       | Tata      | Robert  |
+|       333 | Unix       | Tata      | Selena  |
+|       444 | C          | Pearson   | John    |
+|       555 | Jzee       | Tata      | James   |
+|       666 | ada        | Tata      | Tom     |
++-----------+------------+-----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> insert into Book_Adoption values(5,2,666);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Book_Adoption;
++--------+------+-----------+
+| course | sem  | book_isbn |
++--------+------+-----------+
+|      1 |    2 |       111 |
+|      2 |    7 |       222 |
+|      3 |    4 |       333 |
+|      4 |    6 |       444 |
+|      5 |    2 |       555 |
+|      5 |    2 |       666 |
++--------+------+-----------+
+6 rows in set (0.00 sec)
+
+//(4)Produce a list of text books(includes course# Book_ISBN,Book_title)in the alphabetical order for course offered by the 'CS' department that use more then two books.
+
+mysql> select b.course,t.book_isbn,t.book_title from book_adoption b,text t,course c where c.course = b.course and c.dept = 'CS' and b.book_isbn = t.book_isbn and c.course in(select course from book_adoption where c.dept = 'CS' having course>=2)order by t.book_title;
++--------+-----------+------------+
+| course | book_isbn | book_title |
++--------+-----------+------------+
+|      5 |       666 | ada        |
+|      5 |       555 | Jzee       |
+|      3 |       333 | Unix       |
++--------+-----------+------------+
+3 rows in set (0.00 sec)
+
+//(5)List any department that has all its adopted books published by a specific publisher.
+
+mysql> select c.dept from course c,text t,book_adoption b where t.publisher = 'Pearson' and c.course = b.course and b.book_isbn = t.book_isbn;
++------+
+| dept |
++------+
+| CS   |
+| IS   |
++------+
+2 rows in set (0.00 sec)
