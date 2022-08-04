@@ -1,4 +1,4 @@
-//Cnsider the following schema for order Database
+//Consider the following schema for order Database
 
 mysql> use order_details;
 Database changed
