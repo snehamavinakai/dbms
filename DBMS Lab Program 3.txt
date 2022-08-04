@@ -1,0 +1,212 @@
+ //Consider the following insurance database given below.The primary keys are underlined and data types are specified
+mysql> create database insurance;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use insurance;
+Database changed
+
+mysql> create table Person(driverid char(10) PRIMARY KEY,name char(10),address char(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Person values('a20','Rohita','Vidyanagar');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Person values('a21','Rahul','GokulRoad');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Person values('a22','Rani','Hosur');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Person values('a23','Ravi','Keshwapur');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Person values('a24','Rohit','MGRoad');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from person;
++----------+--------+------------+
+| driverid | name   | address    |
++----------+--------+------------+
+| a20      | Rohita | Vidyanagar |
+| a21      | Rahul  | GokulRoad  |
+| a22      | Rani   | Hosur      |
+| a23      | Ravi   | Keshwapur  |
+| a24      | Rohit  | MGRoad     |
++----------+--------+------------+
+5 rows in set (0.00 sec)
+
+
+mysql> create table Car(regno char(10) PRIMARY KEY,modle char(10),year int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Car values('ka20','Santro',2000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into Car values('ka21','Benz',2001);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Car values('ka22','Ferari',2002);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Car values('ka23','Hatiz',2003);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Car values('ka24','Shift',2004);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from car;
++-------+--------+------+
+| regno | modle  | year |
++-------+--------+------+
+| ka20  | Santro | 2000 |
+| ka21  | Benz   | 2001 |
+| ka22  | Ferari | 2002 |
+| ka23  | Hatiz  | 2003 |
+| ka24  | Shift  | 2004 |
++-------+--------+------+
+5 rows in set (0.00 sec)
+
+mysql> create table accident(reportno int PRIMARY KEY,adate date,location char(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into accident values(11,'2001-01-01','Gadag');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into accident values(12,'2002-02-02','Hubli');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into accident values(13,'2003-03-03','Bombay');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into accident values(14,'2004-04-04','Delhi');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into accident values(15,'2005-05-05','Goa');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from accident;
++----------+------------+----------+
+| reportno | adate      | location |
++----------+------------+----------+
+|       11 | 2001-01-01 | Gadag    |
+|       12 | 2002-02-02 | Hubli    |
+|       13 | 2003-03-03 | Bombay   |
+|       14 | 2004-04-04 | Delhi    |
+|       15 | 2005-05-05 | Goa      |
++----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> create table Owns(driverid char(10),regno char(10),FOREIGN KEY(driverid) references Person(driverid),FOREIGN KEY(regno) references Car(regno));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into owns values('a20','ka20');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into owns values('a21','ka21');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into owns values('a22','ka22');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into owns values('a23','ka23');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into owns values('a24','ka24');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from owns;
++----------+-------+
+| driverid | regno |
++----------+-------+
+| a20      | ka20  |
+| a21      | ka21  |
+| a22      | ka22  |
+| a23      | ka23  |
+| a24      | ka24  |
++----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table participated(driverid char(10) references person(driverid),regno char(10) references car(regno),reportno int references accident(reportno),damageamount int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into participated values('a20','ka20',11,1000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into participated values('a21','ka21',12,2000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into participated values('a22','ka22',13,3000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into participated values('a23','ka23',14,4000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into participated values('a24','ka24',15,5000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from participated;
++----------+-------+----------+--------------+
+| driverid | regno | reportno | damageamount |
++----------+-------+----------+--------------+
+| a20      | ka20  |       11 |         1000 |
+| a21      | ka21  |       12 |         2000 |
+| a22      | ka22  |       13 |         3000 |
+| a23      | ka23  |       14 |         4000 |
+| a24      | ka24  |       15 |         5000 |
++----------+-------+----------+--------------+
+5 rows in set (0.00 sec)
+
+//(3)Demonstarte how you,
+  (a)Update the damage amount for the car with a specific regno in the accident with report number 12 to 25000
+mysql> update participated set damageamount = 25000 where regno = 'ka21' and reportno = 12;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from participated;
++----------+-------+----------+--------------+
+| driverid | regno | reportno | damageamount |
++----------+-------+----------+--------------+
+| a20      | ka20  |       11 |         1000 |
+| a21      | ka21  |       12 |        25000 |
+| a22      | ka22  |       13 |         3000 |
+| a23      | ka23  |       14 |         4000 |
+| a24      | ka24  |       15 |         5000 |
++----------+-------+----------+--------------+
+5 rows in set (0.00 sec)
+
+ (b)Add a new accident to the database.
+mysql> insert into accident values(18,'2008-08-05','Dharwad');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from accident;
++----------+------------+----------+
+| reportno | adate      | location |
++----------+------------+----------+
+|       11 | 2001-01-01 | Gadag    |
+|       12 | 2002-02-02 | Hubli    |
+|       13 | 2003-03-03 | Bombay   |
+|       14 | 2004-04-04 | Delhi    |
+|       15 | 2005-05-05 | Goa      |
+|       18 | 2008-08-05 | Dharwad  |
++----------+------------+----------+
+6 rows in set (0.00 sec)
+
+//(4)Find total no of people who owned cars were involved in accidents in 2002.
+
+mysql> select count(driverid) from participated p,accident a where p.reportno = a.reportno AND adate BETWEEN '2002-01-01' AND '2002-12-31';
++-----------------+
+| count(driverid) |
++-----------------+
+|               1 |
++-----------------+
+1 row in set (0.00 sec)
+
+//(5)Find the number of accidents in which cars belonging to specific model are involved.
+
+mysql> select count(reportno) from participated p,car c where p.regno = c.regno AND modle = 'Santro';
++-----------------+
+| count(reportno) |
++-----------------+
+|               1 |
++-----------------+
+1 row in set (0.00 sec)
