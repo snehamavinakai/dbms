@@ -191,7 +191,7 @@ mysql> select * from Book_Adoption;
 
 //(4)Produce a list of text books(includes course# Book_ISBN,Book_title)in the alphabetical order for course offered by the 'CS' department that use more then two books.
 
-mysql> select b.course,t.book_isbn,t.book_title from book_adoption b,text t,course c where c.course = b.course and c.dept = 'CS' and b.book_isbn = t.book_isbn and c.course in(select course from book_adoption where c.dept = 'CS' having course>=2)order by t.book_title;
+mysql> select b.course,t.book_isbn,t.book_title from book_adoption b,text t,course c where c.course = b.course and b.book_isbn = t.book_isbn and c.course in(select course from book_adoption where c.dept = 'CS' having course>=2)order by t.book_title;
 +--------+-----------+------------+
 | course | book_isbn | book_title |
 +--------+-----------+------------+
