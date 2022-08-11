@@ -36,7 +36,7 @@ mysql> select * from person;
 5 rows in set (0.00 sec)
 
 
-mysql> create table Car(regno char(10) PRIMARY KEY,modle char(10),year int);
+mysql> create table Car(regno char(10) PRIMARY KEY,model char(10),year int);
 Query OK, 0 rows affected (0.02 sec)
 
 mysql> insert into Car values('ka20','Santro',2000);
@@ -56,7 +56,7 @@ Query OK, 1 row affected (0.00 sec)
 
 mysql> select * from car;
 +-------+--------+------+
-| regno | modle  | year |
+| regno | model  | year |
 +-------+--------+------+
 | ka20  | Santro | 2000 |
 | ka21  | Benz   | 2001 |
@@ -203,7 +203,7 @@ mysql> select count(driverid) from participated p,accident a where p.reportno = 
 
 //(5)Find the number of accidents in which cars belonging to specific model are involved.
 
-mysql> select count(reportno) from participated p,car c where p.regno = c.regno AND modle = 'Santro';
+mysql> select count(reportno) from participated p,car c where p.regno = c.regno AND model = 'Santro';
 +-----------------+
 | count(reportno) |
 +-----------------+
