@@ -96,6 +96,7 @@ mysql> select * from orders;
 5 rows in set (0.00 sec)
 
 //(1)Count the customer with grades above Bangalores's average.
+
 mysql> select count(*) from customer where grade>(select avg(grade) from customer where city = 'Banglore');
 +----------+
 | count(*) |
@@ -105,10 +106,26 @@ mysql> select count(*) from customer where grade>(select avg(grade) from custome
 1 row in set (0.00 sec)
 
 //(2)Find the name and numbers of all salesman who had more than one customer.
+
 mysql> select sname,sid from salesman s where 1>(select count(*) from customer where sid = s.sid);
 Empty set (0.00 sec)
+         
+         OR
+         
+mysql> select sid,sname from salesman where 1>=(select count(*) from customer where salesman.sid = customer.sid);
++-----+---------+
+| sid | sname   |
++-----+---------+
+|   1 | Sumanth |
+|   2 | Yash    |
+|   3 | Bhagya  |
+|   4 | Ammu    |
+|   5 | Jhon    |
++-----+---------+
+5 rows in set (0.00 sec)
 
 //(3)List all salesmen and indicate those who have and don't have customers in their cities(use UNION operation).
+
 mysql> select s.sid,sname,cname,commission from salesman s,customer c where s.city = c.city UNION(select sid,sname,'NO MATCH',commission from salesman where not city = any(select city from customer))order by 2 desc;
 +-----+---------+----------+------------+
 | sid | sname   | cname    | commission |
@@ -122,6 +139,7 @@ mysql> select s.sid,sname,cname,commission from salesman s,customer c where s.ci
 5 rows in set (0.01 sec)
 
 //(4)Create a view that finds the salesman who has the customer with the heigest order of a day 
+
 mysql> create view elitsalesman1 as select  o.order_date,s.sid,s.sname from salesman s,orders o where s.sid = o.sid and o.purchase_amt = (select max(purchase_amt)from orders c where c.order_date = o.order_date);
 Query OK, 0 rows affected (0.04 sec)
 
